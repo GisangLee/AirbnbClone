@@ -51,6 +51,7 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     "django_countries",
+    "django_summernote",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS

@@ -10,6 +10,7 @@ django = "==2.2.5"
 pylint = "*"
 pillow = "*"
 django-countries = "*"
+django-summernote = "*"
 
 [requires]
 python_version = "3.8"
