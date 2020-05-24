@@ -11,6 +11,7 @@ pylint = "*"
 pillow = "*"
 django-countries = "*"
 django-summernote = "*"
+django-seed = "*"
 
 [requires]
 python_version = "3.8"
