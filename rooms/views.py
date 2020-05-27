@@ -85,7 +85,7 @@ def search(request):
             qs = models.Room.obejcts.filter(**filter_args).order_by("-created")
             
             paginator = Paginator(qs, 10, orphans=5)
-            page = request.get_page("page", 1)
+            page = request.GET.get_page("page", 1)
             rooms = paginator.get_page(page)
             
             return render(
