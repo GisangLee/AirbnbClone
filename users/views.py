@@ -2,6 +2,7 @@ import os
 import requests
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import FormView, DetailView, UpdateView
 from django.contrib.auth import authenticate, login, logout
 from . import forms
@@ -64,10 +65,11 @@ class UpdateProfileView(UpdateView):
     model = models.User
     template_name = 'users/update_profile.html'
     fields = (
+        "email",
         "first_name",
         "last_name",
-        "gender",
         "bio",
+        "gender",
         "birthdate",
         "language",
         "currency",
@@ -78,6 +80,12 @@ class UpdateProfileView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def form_valid(self, form):
+        email = form.cleaned_date.get("email")
+        self.object.username = email
+        self.save()
+        return super().form_valid(form)
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
         form.fields['first_name'].widget.attrs = {"placeholder": "First name"}
@@ -85,3 +93,7 @@ class UpdateProfileView(UpdateView):
         form.fields['bio'].widget.attrs = {"placeholder": "Bio"}
         form.fields['birthdate'].widget.attrs = {"placeholder": "Birthdate"}
         return form
+
+
+class UpdatePassword(PasswordChangeView):
+    template_name = "users/change-password.html"
