@@ -11,7 +11,7 @@ Home
          style="background-image:url({% static 'img/bg.jpg' %});"></div>
     <div class="flex flex-wrap -mx-40">
         {% for room in rooms %}
-        {% include "partials/room_card.html" with room=room %}
+        {% include "mixins/room_card.html" with room=room %}
         {% endfor %}
     </div>
 </div>
