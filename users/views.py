@@ -3,6 +3,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import FormView, DetailView, UpdateView
 from django.contrib.auth import authenticate, login, logout
 from . import forms
@@ -61,11 +62,10 @@ class UserProfileView(DetailView):
     context_object_name = "user_obj"
 
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(SuccessMessageMixin, UpdateView):
     model = models.User
     template_name = 'users/update_profile.html'
     fields = (
-        "email",
         "first_name",
         "last_name",
         "bio",
@@ -80,12 +80,6 @@ class UpdateProfileView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
-    def form_valid(self, form):
-        email = form.cleaned_date.get("email")
-        self.object.username = email
-        self.save()
-        return super().form_valid(form)
-
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
         form.fields['first_name'].widget.attrs = {"placeholder": "First name"}
@@ -95,5 +89,16 @@ class UpdateProfileView(UpdateView):
         return form
 
 
-class UpdatePassword(PasswordChangeView):
+class UpdatePassword(SuccessMessageMixin, PasswordChangeView):
     template_name = "users/change-password.html"
+    success_message = "Password Updated"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {"placeholder": "Current Password"}
+        form.fields["new_password1"].widget.attrs = {"placeholder": "New Password"}
+        form.fields["new_password2"].widget.attrs = {"placeholder": "Confirm New Password"}
+        return form
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
