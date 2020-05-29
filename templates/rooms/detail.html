@@ -64,7 +64,7 @@
                 <li class="mb-2">{{r}}</li>
             {% endfor %}
         </div>
-        <div class="border-b border-gray-400 pb-8 mt-8">
+        <div>
             <h4 class="font-bold text-lg mb-5 text-2xl">
                 Reviews
             </h4>
@@ -79,12 +79,29 @@
                     <span>review{{room.reviews.count|pluralize}}</span>
                 </div>
             </div>
+            <div class="mt-10">
+                {% for review in room.reviews.all %}
+                <div class="border-b border-gray-400 pb-8 mt-8">
+                    <div class="mb-3 flex">
+                        <div>
+                            {% include "mixins/user_avatar.html" with user=review.user h_and_w='w-10 h-10' text='text-xl' %}
+                        </div>
+                        <div class="flex flex-col ml-5">
+                            <span class="font-bold">{{review.user.first_name}}</span>
+                            <span class="text-sm text-gray-500">{{review.created|date:'F Y'}}</span>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                    <p>{{review.review}}</p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="w-1/3">
-
     </div>
-
 </div>
 
 {% endblock %}
