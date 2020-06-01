@@ -1,3 +1,4 @@
+from django.views import View
 from django_countries import countries
 from django.views.generic import ListView, DetailView, UpdateView
 from django.http import Http404
@@ -120,3 +121,5 @@ class EditRoomView(UpdateView):
         "facilities",
         "houserules",
     )
+
+
