@@ -1,5 +1,5 @@
 from django_countries import countries
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView
 from django.http import Http404
 from django.core.paginator import Paginator
 from django.shortcuts import render
@@ -81,20 +81,42 @@ def search(request):
 
             for facility in facilities:
                 filter_args['facilities'] = facility
-                
+
             qs = models.Room.obejcts.filter(**filter_args).order_by("-created")
-            
+
             paginator = Paginator(qs, 10, orphans=5)
             page = request.GET.get_page("page", 1)
             rooms = paginator.get_page(page)
-            
+
             return render(
                 request, "rooms/search.html", {"form": form, "rooms": rooms}
             )
-            
+
     else:
         form = forms.SearchForm()
-    
-    return render(request, "rooms/search.html", {"form": form})
-    
 
+    return render(request, "rooms/search.html", {"form": form})
+
+
+class EditRoomView(UpdateView):
+    model = models.Room
+    template_name = "rooms/room_edit.html"
+    fields = (
+        "name",
+        "description",
+        "country",
+        "city",
+        "price",
+        "address",
+        "guests",
+        "beds",
+        "bedrooms",
+        "baths",
+        "check_in",
+        "check_out",
+        "instant_book",
+        "room_type",
+        "amenities",
+        "facilities",
+        "houserules",
+    )
